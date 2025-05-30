@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RPG Helper Panel</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>RPG Helper Panel</h1>
+      <nav>
+        <button onclick="showPanel('character')">Generator postaci</button>
+        <button onclick="showPanel('dice')">Kostka do gry</button>
+        <button onclick="showPanel('initiative')">Tracker inicjatywy</button>
+        <button onclick="showPanel('npc')">Lista NPC</button>
+        <button onclick="showPanel('notes')">Notatnik</button>
+      </nav>
+    </header>
+    <main>
+      <section id="character" class="panel"></section>
+      <section id="dice" class="panel" style="display:none"></section>
+      <section id="initiative" class="panel" style="display:none"></section>
+      <section id="npc" class="panel" style="display:none"></section>
+      <section id="notes" class="panel" style="display:none"></section>
+    </main>
+  </div>
+  <script src="app.js"></script>
+  <script src="dice3d.js"></script>
+</body>
+</html>
