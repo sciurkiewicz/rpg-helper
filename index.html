@@ -16,17 +16,27 @@
         <button onclick="showPanel('initiative')">Tracker inicjatywy</button>
         <button onclick="showPanel('npc')">Lista NPC</button>
         <button onclick="showPanel('notes')">Notatnik</button>
+        <button onclick="showPanel('battlemap');renderBattleMapPanel();">Plansza walki</button>
+        <button onclick="showPanel('sound')">Dźwięki / Ambient</button>
       </nav>
     </header>
     <main>
       <section id="character" class="panel"></section>
-      <section id="dice" class="panel" style="display:none"></section>
-      <section id="initiative" class="panel" style="display:none"></section>
-      <section id="npc" class="panel" style="display:none"></section>
-      <section id="notes" class="panel" style="display:none"></section>
+      <section id="dice" class="panel" ></section>
+      <section id="initiative" class="panel" ></section>
+      <section id="npc" class="panel" ></section>
+      <section id="notes" class="panel" ></section>
+      <section id="battlemap" class="panel" ></section>
+      <section id="sound" class="panel" ></section>
     </main>
   </div>
   <script src="app.js"></script>
   <script src="dice3d.js"></script>
+  <script src="character.js"></script>
+  <script src="dice.js"></script>
+  <script src="initiative.js"></script>
+  <script src="npc.js"></script>
+  <script src="notes.js"></script>
+  <script src="sound.js"></script>
 </body>
 </html>
