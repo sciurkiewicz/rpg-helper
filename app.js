@@ -1,18 +1,22 @@
 // Panel switching logic and feature initialization
 function showPanel(panelId) {
-  document.querySelectorAll('.panel').forEach(p => {
-    p.classList.remove('active');
+  const panels = document.querySelectorAll('.panel');
+  panels.forEach(panel => {
+    panel.classList.remove('active');
   });
-  const panel = document.getElementById(panelId);
-  panel.classList.add('active');
-  // Renderuj panel jeśli wymaga dynamicznego ładowania
-  if(panelId === 'character' && typeof renderCharacterPanel === 'function') renderCharacterPanel();
-  if(panelId === 'dice' && typeof renderDicePanel === 'function') renderDicePanel();
-  if(panelId === 'initiative' && typeof renderInitiativePanel === 'function') renderInitiativePanel();
-  if(panelId === 'npc' && typeof renderNpcPanel === 'function') renderNpcPanel();
-  if(panelId === 'notes' && typeof renderNotesPanel === 'function') renderNotesPanel();
-  if(panelId === 'battlemap' && typeof renderBattleMapPanel === 'function') renderBattleMapPanel();
-  if(panelId === 'sound' && typeof renderSoundPanel === 'function') renderSoundPanel();
+
+  const activePanel = document.getElementById(panelId);
+  if (activePanel) {
+    activePanel.classList.add('active');
+  }
+
+  // Render dynamic content for specific panels
+  if (panelId === 'character' && typeof renderCharacterPanel === 'function') renderCharacterPanel();
+  if (panelId === 'dice' && typeof renderDicePanel === 'function') renderDicePanel();
+  if (panelId === 'npc' && typeof renderNpcPanel === 'function') renderNpcPanel();
+  if (panelId === 'notes' && typeof renderNotesPanel === 'function') renderNotesPanel();
+  if (panelId === 'battlemap' && typeof renderBattleMapPanel === 'function') renderBattleMapPanel();
+  if (panelId === 'sound' && typeof renderSoundPanel === 'function') renderSoundPanel();
 }
 
 // --- Panel walki ---

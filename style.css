@@ -123,3 +123,8 @@ button:hover {
   align-items: center;
   margin-top: 16px;
 }
+audio {
+  /* width: 100%; */
+  margin: 10px 0;
+  outline: none;
+}
