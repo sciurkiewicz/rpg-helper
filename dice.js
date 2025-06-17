@@ -22,17 +22,33 @@ function rollDiceGraphic(sides) {
   resultDiv.innerHTML = '';
   let interval = 0;
   let rollCount = 0;
+
+  // Play the dice roll sound immediately on user interaction
+  playDiceRollSound();
+
   interval = setInterval(() => {
-    const fake = Math.floor(Math.random()*sides)+1;
+    const fake = Math.floor(Math.random() * sides) + 1;
     resultDiv.innerHTML = `<span style='font-size:2.2rem;'>${fake}</span>`;
     rollCount++;
     if (rollCount > 12) {
       clearInterval(interval);
-      const result = Math.floor(Math.random()*sides)+1;
+      const result = Math.floor(Math.random() * sides) + 1;
       let color = '#fff';
-      if(result === 1) color = '#ff3b3b';
-      else if(result === sides) color = '#ffd700';
+      if (result === 1) color = '#ff3b3b';
+      else if (result === sides) color = '#ffd700';
       resultDiv.innerHTML = `<span style='font-size:2.6rem; color:${color}; text-shadow:0 0 8px ${color === '#ffd700' ? '#fff7' : color === '#ff3b3b' ? '#ff000055' : '#000a'};'>${result}</span>`;
     }
   }, 80);
+}
+
+function playDiceRollSound() {
+  const audio = new Audio('https://cdn.freesound.org/previews/220/220742_993600-lq.mp3');
+  audio.play().catch(err => console.error('Audio playback failed:', err));
+}
+
+// Modify the rollDice function to include the sound effect
+function rollDice(sides) {
+  const result = Math.floor(Math.random() * sides) + 1;
+  playDiceRollSound(); // Play sound effect
+  return result;
 }

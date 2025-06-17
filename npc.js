@@ -1,28 +1,24 @@
-// Lista NPC
+let npcList = JSON.parse(localStorage.getItem('npcList')) || [];
+
 function renderNpcPanel() {
   const el = document.getElementById('npc');
   el.innerHTML = `
     <h2>Lista NPC</h2>
-    <form id="npc-form" onsubmit="addNpc(event)">
-      <input id="npc-name" placeholder="Imię NPC" required />
-      <input id="npc-desc" placeholder="Opis" />
-      <button type="submit">Dodaj</button>
+    <form id="npc-form" style="margin-bottom: 10px;">
+      <input type="text" id="npc-name" placeholder="Imię NPC" required />
+      <button type="button" id="add-npc">Dodaj NPC</button>
     </form>
-    <ul id="npc-list"></ul>
+    <ul id="npc-list">
+      ${npcList.map(npc => `<li>${npc}</li>`).join('')}
+    </ul>
   `;
-  window.npcs = [];
-  updateNpcList();
-}
-function addNpc(e) {
-  e.preventDefault();
-  const name = document.getElementById('npc-name').value;
-  const desc = document.getElementById('npc-desc').value;
-  window.npcs.push({name, desc});
-  updateNpcList();
-  e.target.reset();
-}
-function updateNpcList() {
-  const ul = document.getElementById('npc-list');
-  if (!ul) return;
-  ul.innerHTML = window.npcs.map(n=>`<li><b>${n.name}</b>: ${n.desc}</li>`).join('');
+
+  document.getElementById('add-npc').addEventListener('click', () => {
+    const npcName = document.getElementById('npc-name').value.trim();
+    if (npcName) {
+      npcList.push(npcName);
+      localStorage.setItem('npcList', JSON.stringify(npcList));
+      renderNpcPanel();
+    }
+  });
 }
