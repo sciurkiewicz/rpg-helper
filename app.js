@@ -8,8 +8,7 @@ function showPanel(panelId) {
   // Renderuj panel jeśli wymaga dynamicznego ładowania
   if(panelId === 'character' && typeof renderCharacterPanel === 'function') renderCharacterPanel();
   if(panelId === 'dice' && typeof renderDicePanel === 'function') renderDicePanel();
-  if(panelId === 'initiative' && typeof renderInitiativePanel === 'function') renderInitiativePanel();
-  if(panelId === 'npc' && typeof renderNpcPanel === 'function') renderNpcPanel();
+  if(panelId === 'players' && typeof renderPlayersPanel === 'function') renderPlayersPanel();
   if(panelId === 'notes' && typeof renderNotesPanel === 'function') renderNotesPanel();
   if(panelId === 'battlemap' && typeof renderBattleMapPanel === 'function') renderBattleMapPanel();
   if(panelId === 'sound' && typeof renderSoundPanel === 'function') renderSoundPanel();
@@ -25,24 +24,79 @@ function renderBattleMapPanel() {
     <div id="battlemap-canvas-container" style="display:flex; justify-content:center; margin: 24px 0;">
       <canvas id="battlemap-canvas" width="1000" height="700" style="background:#23262f; border:2px solid #ffd700; border-radius:10px; cursor:grab;"></canvas>
     </div>
-    <div style="text-align:center;">
-      <button onclick="addBattlePin()">Dodaj pionek</button>
-      <button onclick="addEnemyPin()" style="margin-left:12px;">Dodaj przeciwnika</button>
-      <button onclick="removeEnemyPin()" style="margin-left:12px;">Usuń przeciwnika</button>
-      <button onclick="addRandomRoom()" style="margin-left:12px;">Losowe pomieszczenie</button>
-      <button onclick="addRandomTree()" style="margin-left:12px;">Losowe drzewo</button>
-      <button onclick="saveBattleMap()" style="margin-left:12px;">Zapisz mapę</button>
-      <button onclick="clearBattleArrows()" style="margin-left:12px;">Wyczyść strzałki</button>
-      <button onclick="toggleWallDrawing()" style="margin-left:12px;" id="wall-draw-btn">Rysuj ściany</button>
-      <button onclick="clearBattleWalls()" style="margin-left:12px;">Wyczyść ściany</button>
-      <button onclick="generateCity()" style="margin-left:12px;">Generuj miasto</button>
-      <button onclick="generateVillage()" style="margin-left:12px;">Generuj wioskę</button>
-      <button onclick="generateForest()" style="margin-left:12px;">Generuj las</button>
-      <br style="margin-bottom:8px;"/>
+    <div style="text-align:center; margin-bottom:12px;">
+      <select id="add-player-pin-select" style="min-width:180px;">
+        <option value="">Dodaj postać z karty na planszę...</option>
+      </select>
+      <button onclick="addPlayerPinToBattlemap()" id="add-player-pin-btn" disabled>Dodaj na planszę</button>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center; margin-bottom:10px;">
+      <div style="display:flex; flex-direction:column; gap:8px; align-items:center; min-width:180px;">
+        <div style="font-weight:bold; color:#ffd700; margin-bottom:2px;">Pionki</div>
+        <button onclick="addBattlePin()">Dodaj pionek</button>
+        <button onclick="addEnemyPin()">Dodaj przeciwnika</button>
+        <button onclick="removeEnemyPin()">Usuń przeciwnika</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; align-items:center; min-width:180px;">
+        <div style="font-weight:bold; color:#ffd700; margin-bottom:2px;">Teren</div>
+        <button onclick="addRandomRoom()">Losowe pomieszczenie</button>
+        <button onclick="addRandomTree()">Losowe drzewo</button>
+        <button onclick="generateCity()">Generuj miasto</button>
+        <button onclick="generateVillage()">Generuj wioskę</button>
+        <button onclick="generateForest()">Generuj las</button>
+        <button onclick="saveBattleMap()">Zapisz mapę</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; align-items:center; min-width:180px;">
+        <div style="font-weight:bold; color:#ffd700; margin-bottom:2px;">Strzałki i ściany</div>
+        <button onclick="clearBattleArrows()">Wyczyść strzałki</button>
+        <button onclick="toggleWallDrawing()" id="wall-draw-btn">Rysuj ściany</button>
+        <button onclick="clearBattleWalls()">Wyczyść ściany</button>
+      </div>
+    </div>
+    <div style="text-align:center; margin-bottom:8px;">
       <span style="margin-left:16px; color:#aaa;">Przeciągaj pionki myszką, rysuj strzałki trzymając Shift, ściany tryb: Alt</span>
     </div>
   `;
   setupBattleMapCanvas();
+  renderPlayerPinSelect();
+}
+
+function renderPlayerPinSelect() {
+  const select = document.getElementById('add-player-pin-select');
+  const btn = document.getElementById('add-player-pin-btn');
+  select.innerHTML = '<option value="">Dodaj postać z karty na planszę...</option>';
+  if (!window.playerCards || window.playerCards.length === 0) {
+    select.disabled = true;
+    btn.disabled = true;
+    return;
+  }
+  window.playerCards.forEach((p, i) => {
+    select.innerHTML += `<option value="${i}">${p.name} (${p.playerClass}, ${p.race})</option>`;
+  });
+  select.disabled = false;
+  btn.disabled = true;
+  select.onchange = function() {
+    btn.disabled = !select.value;
+  };
+}
+
+function addPlayerPinToBattlemap() {
+  const select = document.getElementById('add-player-pin-select');
+  if (!select || !select.value) return;
+  const idx = parseInt(select.value);
+  if (isNaN(idx) || !window.playerCards || !window.playerCards[idx]) return;
+  const p = window.playerCards[idx];
+  const color = '#2196f3';
+  window.battlePins = window.battlePins || [];
+  // Unikalna etykieta: imię + klasa
+  const label = p.name;
+  window.battlePins.push({
+    x: 60 + Math.random() * 480,
+    y: 60 + Math.random() * 280,
+    label,
+    color
+  });
+  if(window.redrawBattleMap) window.redrawBattleMap();
 }
 
 // --- GENERATORY MAP (przyciski) ---
